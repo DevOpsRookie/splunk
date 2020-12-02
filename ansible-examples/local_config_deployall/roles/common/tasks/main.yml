@@ -1,0 +1,67 @@
+  # Add Splunk group and user
+    - name: Ensure group "splunk" exists
+      group:
+        name: splunk
+        state: present
+
+    - name: Add the Splunk user
+      user:
+        name: splunk
+        shell: /bin/bash
+        groups: splunk
+        append: yes
+
+    - name: Configure ulimits system settings, file descriptors and number of threads
+      pam_limits:
+        domain: splunk
+        limit_type: "{{item.limit_type}}"
+        limit_item: "{{item.limit_item}}"
+        value: "{{item.value}}"
+      with_items:
+        - { limit_type: '-', limit_item: 'nofile', value: 65536 }
+        - { limit_type: '-', limit_item: 'nproc', value: 65536 }
+        - { limit_type: 'soft', limit_item: 'memlock', value: unlimited }
+        - { limit_type: 'hard', limit_item: 'memlock', value: unlimited }
+
+    - name: reload settings from all system configuration files
+      shell: sysctl --system
+
+    - name: Copy Splunk tarball to remote host and unpack
+      unarchive:
+        src: /tmp/splunk-8.1.0.1-24fd52428b5a-Linux-x86_64.tgz
+        dest: /opt
+        owner: splunk
+        group: splunk
+        #mode: '0644'
+
+    #- name: Set permissions on the tree
+
+    - name: Start Splunk and accept the licence
+      command:
+        cmd: "/opt/splunk/bin/splunk start --accept-license --no-prompt"
+      become: true
+      become_user: splunk
+
+    - name: Stop Splunk to add user data
+      command:
+        cmd: "/opt/splunk/bin/splunk stop"
+      become: true
+      become_user: splunk
+
+    - name: Copy over user-seed.conf to initialise admin user
+      copy:
+        src: /tmp/user-seed.conf
+        dest: /opt/splunk/etc/system/local/user-seed.conf
+        owner: splunk
+        group: splunk
+        mode: '0644'
+
+    - name: Start Splunk
+      command:
+        cmd: "/opt/splunk/bin/splunk start"
+      become: true
+      become_user: splunk
+
+    - name: Enable init script
+      command:
+        cmd: "/opt/splunk/bin/splunk enable boot-start -user splunk"
