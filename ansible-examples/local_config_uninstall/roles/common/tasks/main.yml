@@ -1,0 +1,28 @@
+
+  - name: Disable boot-start
+    command:
+      cmd: "/opt/splunk/bin/splunk disable boot-start"
+    become: true
+    become_user: root
+
+  - name: Stop Splunk
+    command:
+      cmd: "/opt/splunk/bin/splunk stop"
+    become: true
+    become_user: root
+
+  - name: Remove splunk folder
+    file:
+      path: /opt/splunk
+      state: absent
+
+  - name: Delete group splunk 
+    group:
+      name: splunk
+      state: absent
+
+  - name: Remove the user 'splunk'
+    user:
+      name: johnd
+      state: absent
+      remove: yes
