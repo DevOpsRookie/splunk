@@ -42,11 +42,15 @@
       become: true
       become_user: splunk
       
+    - name: ansible create directory enterprise in licenses
+      file:
+        path: /opt/splunk/etc/licenses/enterprise
+        state: directory
       
     - name: Copy Splunk licenses
       copy:
         src: /tmp/Splunk.license
-        dest: /opt/splunk/etc/licenses
+        dest: /opt/splunk/etc/licenses/enterprise/Splunk.license
         owner: splunk
         group: splunk
         #mode: '0644'
