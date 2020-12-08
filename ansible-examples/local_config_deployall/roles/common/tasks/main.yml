@@ -54,6 +54,8 @@
         owner: splunk
         group: splunk
         #mode: '0644'
+        
+ 
 
     - name: Stop Splunk to add user data
       command:
