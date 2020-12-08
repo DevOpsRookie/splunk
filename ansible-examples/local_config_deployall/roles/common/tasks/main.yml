@@ -33,6 +33,14 @@
         owner: splunk
         group: splunk
         #mode: '0644'
+        
+    - name: Copy Splunk tarball to remote host and unpack
+      unarchive:
+        src: /tmp/Splunk.license
+        dest: /opt/splunk/etc/licenses
+        owner: splunk
+        group: splunk
+        #mode: '0644'
 
     #- name: Set permissions on the tree
 
