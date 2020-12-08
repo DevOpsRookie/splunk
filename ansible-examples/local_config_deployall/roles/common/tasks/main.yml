@@ -44,7 +44,7 @@
       
       
     - name: Copy Splunk licenses
-      unarchive:
+      copy:
         src: /tmp/Splunk.license
         dest: /opt/splunk/etc/licenses
         owner: splunk
