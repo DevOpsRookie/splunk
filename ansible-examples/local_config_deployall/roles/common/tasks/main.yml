@@ -28,7 +28,7 @@
 
     - name: Copy Splunk tarball to remote host and unpack
       unarchive:
-        src: /tmp/splunk-8.1.0.1-24fd52428b5a-Linux-x86_64.tgz
+        src: /tmp/splunk-8.1.2-545206cc9f70-Linux-x86_64.tgz
         dest: /opt
         owner: splunk
         group: splunk
