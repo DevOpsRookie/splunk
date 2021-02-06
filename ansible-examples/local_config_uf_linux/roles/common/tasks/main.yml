@@ -1,0 +1,44 @@
+# Add Splunk group and user
+  - name: Ensure group "splunk" exists
+    group:
+      name: splunk
+      state: present
+
+  - name: Add the Splunk user
+    user:
+      name: splunk
+      shell: /bin/bash
+      groups: splunk
+      append: yes
+
+  - name: Copy Splunk tarball to remote host and unpack
+    unarchive:
+      src: /tmp/splunkforwarder-8.1.2-545206cc9f70-Linux-x86_64.tgz
+      dest: /opt
+      owner: splunk
+      group: splunk
+      #mode: '0644'
+
+  - name: Copy over user-seed.conf to initialise admin user
+    copy:
+      src: /tmp/user-seed.conf
+      dest: /opt/splunkforwarder/etc/system/local/user-seed.conf
+      owner: splunk
+      group: splunk
+      mode: '0644'
+
+  - name: Copy over deploymentment.conf
+    copy:
+      src: /tmp/deploymentclient.conf
+      dest: /opt/splunkforwarder/etc/system/local
+      owner: splunk
+      group: splunk
+      mode: '0644'
+
+  - name: Start Splunk
+    command:
+      cmd: "/opt/splunkforwarder/bin/splunk start --accept-license"
+    become: true
+    become_user: splunk
+    
+ 
