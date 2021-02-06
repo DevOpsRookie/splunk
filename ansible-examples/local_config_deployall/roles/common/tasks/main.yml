@@ -54,8 +54,15 @@
         owner: splunk
         group: splunk
         #mode: '0644'
-        
- 
+       
+
+    - name: Copy inputs.conf
+      copy:
+        src: /tmp/inputs.conf
+        dest: /opt/splunk/etc/system/local/inputs.conf
+        owner: splunk
+        group: splunk
+        mode: '0644'
 
     - name: Stop Splunk to add user data
       command:
