@@ -1,3 +1,5 @@
 user-seed.conf
 Splunk.license
 splunk-8.1.2-545206cc9f70-Linux-x86_64.tgz
+inputs.conf
+deploymentclient.conf
