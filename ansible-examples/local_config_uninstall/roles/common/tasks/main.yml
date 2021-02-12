@@ -1,13 +1,13 @@
 
   - name: Disable boot-start
     command:
-      cmd: "/opt/splunkforwarder/bin/splunk disable boot-start"
+      cmd: "/opt/splunk/bin/splunk disable boot-start"
     become: true
     become_user: root
 
   - name: Stop Splunk
     command:
-      cmd: "/opt/splunkforwarder/bin/splunk stop"
+      cmd: "/opt/splunk/bin/splunk stop"
     become: true
     become_user: root
 
